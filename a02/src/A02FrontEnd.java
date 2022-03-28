@@ -22,16 +22,18 @@ public class A02FrontEnd extends JFrame implements ItemListener, ActionListener{
     JTextField fromDate;
     JTextField toDate;
     JButton submitQuery;
+    A02MiddleTier controller;
     
-	public A02FrontEnd() {
-		initialize();
+	public A02FrontEnd(A02MiddleTier controller) {
+		initialize(controller);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(A02MiddleTier controller) {
 
+		this.controller = controller;
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
@@ -80,8 +82,10 @@ public class A02FrontEnd extends JFrame implements ItemListener, ActionListener{
         toLabel.setEnabled(false);
         fromDate = new JTextField();
         fromDate.setEnabled(false);
+        fromDate.setText("yyyy-mm-dd");
         toDate = new JTextField();
         toDate.setEnabled(false);
+        toDate.setText("yyyy-mm-dd");
         JPanel dateRangePanel = new JPanel(new GridLayout(0, 4));
 		dateRangePanel.add(fromLabel);
 		dateRangePanel.add(fromDate);
@@ -169,7 +173,27 @@ public class A02FrontEnd extends JFrame implements ItemListener, ActionListener{
 	
     /** Listens to the submit button click */
     public void actionPerformed(ActionEvent e) {
+    	String from;
+    	String to;
     	queryOutput.setText(queryOutput.getText()+"\n"+fromDate.getText()+"\n"+toDate.getText());
+    	
+    	//Checking if date was added by user
+    	if(!fromDate.getText().equals("yyyy-mm-dd")) {
+    		//changing date
+        	from = fromDate.getText();
+    	}else {
+    		//show date was not changed
+    		from = "";
+    	}
+    	
+    	if(!toDate.getText().equals("yyyy-mm-dd")) {
+    		to = toDate.getText();
+    	}else {
+    		to = "";
+    	}
+    	
+    	//pass from and to date to controller
+    	this.controller.query(from, to);
     }
 
 }
