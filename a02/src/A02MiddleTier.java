@@ -13,18 +13,12 @@ public class A02MiddleTier {
 	}
 
 	// This class will contain your code for interacting with Database
-	public void query(String from, String to) {
-		String commandStr;
+	public String query(String from, String to) {
+		String commandStr = "";
+		String output = "";
+		
 		if(!from.equals("")) {
-	    	//simple date format to get the date from jtextfields and turn them into Date objects to be passed to controller
-//	    	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-//	    	try {
-//	    		Date fromDate = sf.parse(from);
-//		    	Date toDate = sf.parse(to);
-//	    	}catch(ParseException e) {
-//	    		System.out.println(e.getMessage());
-//	    	}
-			// Connect to database
+			//Date Range Selected 
 			ResultSet data = null;
 			
 			System.out.println("CONNECTING TO DB");
@@ -35,7 +29,8 @@ public class A02MiddleTier {
 				System.out.println(c.getCatalog());
 				System.out.println(c.toString());
 				Statement command = c.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				commandStr = "SELECT name FROM EVENT WHERE ";
+				commandStr = "Select Name, ActivityDate  FROM Event Join ActivityHappens on ID = EventID WHERE ActivityDate between '" + from + "' AND '" + to + "'";
+				output.concat(commandStr + "\n");
 				data = command.executeQuery(commandStr);
 			} catch (SQLException e) {
 				System.out.println("SQL CONNECTION ERROR");
@@ -55,8 +50,12 @@ public class A02MiddleTier {
 				}
 			} 			
 		}else {
+			//All Events Selected
+			
+			System.out.println("NO DATE SELECTED ");
 			// Connect to database
 			ResultSet data = null;
+			commandStr = "SELECT Name FROM EVENT";
 			
 			System.out.println("CONNECTING TO DB");
 			try {
@@ -66,7 +65,9 @@ public class A02MiddleTier {
 				System.out.println(c.getCatalog());
 				System.out.println(c.toString());
 				Statement command = c.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				data = command.executeQuery("Select Name FROM EVENT");
+				data = command.executeQuery(commandStr);
+				output = output + "Query:\n" + commandStr + "\nOutput:\n";
+				System.out.println("OUT: " + output);
 			} catch (SQLException e) {
 				System.out.println("SQL CONNECTION ERROR");
 				System.out.println(e.getSQLState());
@@ -78,12 +79,16 @@ public class A02MiddleTier {
 					if(data.first()) {
 						while(data.next()) {
 							System.out.println("Event Name: " + data.getString("Name"));
+							output =  output + "Event Name: " + data.getString("Name") + "\n";
 						}
 					}	
 				}catch(SQLException e) {
 					System.out.println(e.getMessage());
 				}
 			}
+			return output;
+
 		}
+		return "";
 	}
 }

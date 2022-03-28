@@ -175,7 +175,7 @@ public class A02FrontEnd extends JFrame implements ItemListener, ActionListener{
     public void actionPerformed(ActionEvent e) {
     	String from;
     	String to;
-    	queryOutput.setText(queryOutput.getText()+"\n"+fromDate.getText()+"\n"+toDate.getText());
+    	String newOutput = "";
     	
     	//Checking if date was added by user
     	if(!fromDate.getText().equals("yyyy-mm-dd")) {
@@ -193,7 +193,10 @@ public class A02FrontEnd extends JFrame implements ItemListener, ActionListener{
     	}
     	
     	//pass from and to date to controller
-    	this.controller.query(from, to);
+    	newOutput = this.controller.query(from, to);
+    	System.out.println("NEW OUTPUT" + newOutput);
+    	queryOutput.setText(newOutput);
+
     }
 
 }
