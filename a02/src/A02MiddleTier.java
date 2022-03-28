@@ -13,7 +13,7 @@ public class A02MiddleTier {
 	}
 
 	// This class will contain your code for interacting with Database
-	public String query(String from, String to) {
+	public String query(String from, String to, Boolean conference, Boolean journal, Boolean book) {
 		String commandStr = "";
 		String output = "";
 		
@@ -30,7 +30,7 @@ public class A02MiddleTier {
 				System.out.println(c.toString());
 				Statement command = c.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				commandStr = "Select Name, ActivityDate  FROM Event Join ActivityHappens on ID = EventID WHERE ActivityDate between '" + from + "' AND '" + to + "'";
-				output.concat(commandStr + "\n");
+				output = output + "Query:\n" + commandStr + "\nOutput:\n";
 				data = command.executeQuery(commandStr);
 			} catch (SQLException e) {
 				System.out.println("SQL CONNECTION ERROR");
@@ -43,15 +43,17 @@ public class A02MiddleTier {
 					if(data.first()) {
 						while(data.next()) {
 							System.out.println("Event Name: " + data.getString("Name"));
+							output =  output + "Event Name: " + data.getString("Name") + "\t" + data.getString("ActivityDate") + "\n";
+
 						}
 					}	
 				}catch(SQLException e) {
 					System.out.println(e.getMessage());
 				}
-			} 			
+			}
+			return output;
 		}else {
 			//All Events Selected
-			
 			System.out.println("NO DATE SELECTED ");
 			// Connect to database
 			ResultSet data = null;
@@ -89,6 +91,5 @@ public class A02MiddleTier {
 			return output;
 
 		}
-		return "";
 	}
 }

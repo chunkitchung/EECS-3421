@@ -193,7 +193,7 @@ public class A02FrontEnd extends JFrame implements ItemListener, ActionListener{
     	}
     	
     	//pass from and to date to controller
-    	newOutput = this.controller.query(from, to);
+    	newOutput = this.controller.query(from, to, eventConference.isSelected(), eventJournal.isSelected(), eventBook.isSelected());
     	System.out.println("NEW OUTPUT" + newOutput);
     	queryOutput.setText(newOutput);
 
